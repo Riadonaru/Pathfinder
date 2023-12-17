@@ -40,11 +40,26 @@ Node Node::rightNeighbor()
 
 void Node::draw()
 {
-    drawCircle(trans_x, trans_y, 0.01f, 10);
+    drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 10);
 
     if (up != nullptr)
     {
-        drawLine(trans_x, trans_y + 0.05f, up->trans_x, up->trans_y - 0.05f);
+        drawLine(trans_x + X_LINESPACE, trans_y + TWO_Y_LINESPACE, up->trans_x + X_LINESPACE, up->trans_y - TWO_Y_LINESPACE);
+    }
+
+    if (down != nullptr)
+    {
+        drawLine(trans_x - X_LINESPACE, trans_y - TWO_Y_LINESPACE, down->trans_x - X_LINESPACE, down->trans_y + TWO_Y_LINESPACE);
+    }
+
+    if (left != nullptr)
+    {
+        drawLine(trans_x - TWO_X_LINESPACE, trans_y - Y_LINESPACE, left->trans_x + TWO_X_LINESPACE, left->trans_y - Y_LINESPACE);
+    }
+
+    if (right != nullptr)
+    {
+        drawLine(trans_x + TWO_X_LINESPACE, trans_y + Y_LINESPACE, right->trans_x - TWO_X_LINESPACE, right->trans_y + Y_LINESPACE);
     }
 
     // drawLine(trans_x, trans_y + 0.05f, trans_x, trans_y - 0.05f);
