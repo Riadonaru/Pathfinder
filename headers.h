@@ -22,30 +22,40 @@ public:
     {
         this->x = x;
         this->y = y;
-        linkUpperNeighbor(nodes[x][y + 1]);
-        linkLowerNeighbor(nodes[x][y - 1]);
-        linkLeftNeighbor(nodes[x - 1][y]);
-        linkRightNeighbor(nodes[x + 1][y]);
+        trans_x = X_SPACING * (x + 1) - 1.1f;
+        trans_y = Y_SPACING * (y + 1) - 1.2f;
+
+        linkUpperNeighbor(&nodes[x][y + 1]);
+        // linkLowerNeighbor(nodes[x][y - 1]);
+        // linkLeftNeighbor(nodes[x - 1][y]);
+        // linkRightNeighbor(nodes[x + 1][y]);
     }
 
-    void linkUpperNeighbor(Node n)
+    void linkUpperNeighbor(Node *n)
     {
-        this->up = &n;
+        if (y + 1 < HEIGHT)
+        {
+            this->up = n;
+        }
+        else
+        {
+            this->up = nullptr;
+        }
     }
 
-    void linkLowerNeighbor(Node n)
+    void linkLowerNeighbor(Node *n)
     {
-        this->down = &n;
+        this->down = n;
     }
 
-    void linkLeftNeighbor(Node n)
+    void linkLeftNeighbor(Node *n)
     {
-        this->left = &n;
+        this->left = n;
     }
 
-    void linkRightNeighbor(Node n)
+    void linkRightNeighbor(Node *n)
     {
-        this->right = &n;
+        this->right = n;
     }
 
     Node upperNeighbor();
@@ -53,19 +63,21 @@ public:
     Node leftNeighbor();
     Node rightNeighbor();
 
-
     void draw();
 
-private:
+    // private:
     Node *up;
     Node *down;
     Node *left;
     Node *right;
 
-    float x;
-    float y;
+    int x;
+    int y;
+    float trans_x;
+    float trans_y;
 };
 
 void drawLine(float x1, float y1, float x2, float y2);
-
+void drawSquare(float x, float y, float size);
+void drawCircle(float x, float y, float radius, int segments);
 #endif

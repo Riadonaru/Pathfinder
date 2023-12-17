@@ -1,55 +1,8 @@
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
-#include <stdexcept>
-#include <stdio.h>
 #include "headers.h"
-
-Node Node::nodes[WIDTH][HEIGHT];
-Node Node::upperNeighbor()
-{
-    if (up != nullptr)
-    {
-        return *up;
-    }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s upper neighbor was denied because it is null");
-}
-
-Node Node::lowerNeighbor()
-{
-    if (down != nullptr)
-    {
-        return *down;
-    }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s lower neighbor was denied because it is null");
-}
-
-Node Node::leftNeighbor()
-{
-    if (left != nullptr)
-    {
-        return *left;
-    }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s left neighbor was denied because it is null");
-}
-
-Node Node::rightNeighbor()
-{
-    if (right != nullptr)
-    {
-        return *right;
-    }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s right neighbor was denied because it is null");
-}
-
-
-void Node::draw()
-{
-    float trans_x = X_SPACING * (x + 1) - 1.1;
-    float trans_y = Y_SPACING * (y + 1) - 1.2f;
-
-    drawLine(trans_x, trans_y + 0.05f, trans_x, trans_y - 0.05f);
-    drawLine(trans_x + 0.05f, trans_y, trans_x - 0.05f, trans_y);
-}
+#include <math.h>
+#include <stdio.h>
 
 void drawLine(float x1, float y1, float x2, float y2)
 {
@@ -59,9 +12,34 @@ void drawLine(float x1, float y1, float x2, float y2)
     glEnd();
 }
 
+void drawSquare(float x, float y, float size)
+{
+    glBegin(GL_QUADS);
+    glVertex2f(x - size / 2.0, y - size / 2.0); // Bottom-left vertex
+    glVertex2f(x + size / 2.0, y - size / 2.0); // Bottom-right vertex
+    glVertex2f(x + size / 2.0, y + size / 2.0); // Top-right vertex
+    glVertex2f(x - size / 2.0, y + size / 2.0); // Top-left vertex
+    glEnd();
+}
+
+void drawCircle(float center_x, float center_y, float radius, int segments)
+{
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2d(center_x, center_y); // Center of the circle
+
+    for (int i = 0; i <= segments; ++i)
+    {
+        float angle = 2.0f * M_PI * static_cast<float>(i) / static_cast<float>(segments);
+        float x = radius * std::cos(angle);
+        float y = radius * std::sin(angle);
+        glVertex2f(x + center_x, y + center_y);
+    }
+
+    glEnd();
+}
+
 int main()
 {
-
     for (int i = 0; i < HEIGHT; i++)
     {
         for (int j = 0; j < WIDTH; j++)
@@ -75,7 +53,7 @@ int main()
     if (!glfwInit())
         return -1;
 
-    window = glfwCreateWindow(1280, 720, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(1280, 720, "Pathfinding Example", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -93,8 +71,8 @@ int main()
         {
             for (int j = 0; j < WIDTH; j++)
             {
-
                 Node::nodes[j][i].draw();
+                Node temp = Node::nodes[j][i];
             }
         }
 
