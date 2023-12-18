@@ -24,10 +24,11 @@ public:
     {
     }
 
-    Node(int x, int y)
+    Node(int x, int y, bool highlight)
     {
         this->x = x;
         this->y = y;
+        this->highlight = highlight;
         trans_x = X_SPACING * (x + 0.5f) - 1.0f;
         trans_y = Y_SPACING * (y + 0.5f) - 1.0f;
 
@@ -91,6 +92,7 @@ public:
     Node rightNeighbor();
 
     void draw();
+    void draw(float r, float g, float b);
 
 private:
     Node *up;
@@ -102,9 +104,12 @@ private:
     int y;
     float trans_x;
     float trans_y;
+
+    bool highlight;
+
 };
 
-void drawLine(float x1, float y1, float x2, float y2);
+void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b);
 void drawSquare(float x, float y, float size);
-void drawCircle(float x, float y, float radius, int segments);
+void drawCircle(float x, float y, float radius, int segments, float r, float g, float b);
 #endif

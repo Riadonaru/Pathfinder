@@ -4,11 +4,13 @@
 #include <math.h>
 #include <stdio.h>
 
-void drawLine(float x1, float y1, float x2, float y2)
+void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
 {
     glBegin(GL_LINES);
+    glColor3f(r, g, b);
     glVertex2f(x1, y1);
     glVertex2f(x2, y2);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -22,9 +24,10 @@ void drawSquare(float x, float y, float size)
     glEnd();
 }
 
-void drawCircle(float center_x, float center_y, float radius, int segments)
+void drawCircle(float center_x, float center_y, float radius, int segments, float r, float g, float b)
 {
     glBegin(GL_TRIANGLE_FAN);
+    glColor3f(r, g, b);
     glVertex2d(center_x, center_y); // Center of the circle
 
     for (int i = 0; i <= segments; ++i)
@@ -34,7 +37,7 @@ void drawCircle(float center_x, float center_y, float radius, int segments)
         float y = radius * std::sin(angle);
         glVertex2f(x + center_x, y + center_y);
     }
-
+    glColor3f(1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
@@ -44,7 +47,14 @@ int main()
     {
         for (int j = 0; j < WIDTH; j++)
         {
-            Node::nodes[j][i] = Node(j, i);
+            if (i == 3 && j == 4)
+            {
+                Node::nodes[j][i] = Node(j, i, true);
+            }
+            else
+            {
+                Node::nodes[j][i] = Node(j, i, false);
+            }
         }
     }
 

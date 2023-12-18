@@ -40,28 +40,36 @@ Node Node::rightNeighbor()
 
 void Node::draw()
 {
-    drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 10);
+    if (highlight)
+    {
+        draw(0.0f, 0.0f, 1.0f);
+    }
+    else
+    {
+        draw(1.0f, 1.0f, 1.0f);
+    }
+}
 
+void Node::draw(float r, float g, float b)
+{
+    drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 10, r, g, b);
     if (up != nullptr)
     {
-        drawLine(trans_x + X_LINESPACE, trans_y + TWO_Y_LINESPACE, up->trans_x + X_LINESPACE, up->trans_y - TWO_Y_LINESPACE);
+        drawLine(trans_x + X_LINESPACE, trans_y + TWO_Y_LINESPACE, up->trans_x + X_LINESPACE, up->trans_y - TWO_Y_LINESPACE, 1.0f, 1.0f, 1.0f);
     }
 
     if (down != nullptr)
     {
-        drawLine(trans_x - X_LINESPACE, trans_y - TWO_Y_LINESPACE, down->trans_x - X_LINESPACE, down->trans_y + TWO_Y_LINESPACE);
+        drawLine(trans_x - X_LINESPACE, trans_y - TWO_Y_LINESPACE, down->trans_x - X_LINESPACE, down->trans_y + TWO_Y_LINESPACE, 1.0f, 1.0f, 1.0f);
     }
 
     if (left != nullptr)
     {
-        drawLine(trans_x - TWO_X_LINESPACE, trans_y - Y_LINESPACE, left->trans_x + TWO_X_LINESPACE, left->trans_y - Y_LINESPACE);
+        drawLine(trans_x - TWO_X_LINESPACE, trans_y - Y_LINESPACE, left->trans_x + TWO_X_LINESPACE, left->trans_y - Y_LINESPACE, 1.0f, 1.0f, 1.0f);
     }
 
     if (right != nullptr)
     {
-        drawLine(trans_x + TWO_X_LINESPACE, trans_y + Y_LINESPACE, right->trans_x - TWO_X_LINESPACE, right->trans_y + Y_LINESPACE);
+        drawLine(trans_x + TWO_X_LINESPACE, trans_y + Y_LINESPACE, right->trans_x - TWO_X_LINESPACE, right->trans_y + Y_LINESPACE, 1.0f, 1.0f, 1.0f);
     }
-
-    // drawLine(trans_x, trans_y + 0.05f, trans_x, trans_y - 0.05f);
-    // drawLine(trans_x + 0.05f, trans_y, trans_x - 0.05f, trans_y);
 }
