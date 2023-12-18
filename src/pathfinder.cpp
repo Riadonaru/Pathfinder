@@ -4,6 +4,18 @@
 #include <math.h>
 #include "node.h"
 #include "draw.h"
+#include <cstdlib>
+#include <ctime>
+#include <random>
+
+int randInt(int min, int max)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<int> distribution(min, max);
+    return distribution(gen);
+}
 
 void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
 {
@@ -15,13 +27,17 @@ void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
     glEnd();
 }
 
-void drawSquare(float x, float y, float size, float r, float g, float b)
+void drawSquare(float x, float y, float size, float r, float g, float b, bool fill)
 {
-
-    // Adjust both width and height for aspect ratio
     float adjustedHeight = size * ASPECT_RATIO;
-
-    glBegin(GL_LINE_LOOP);
+    if (fill)
+    {
+        glBegin(GL_QUADS);
+    }
+    else
+    {
+        glBegin(GL_LINE_LOOP);
+    }
     glColor3f(r, g, b);
     glVertex2f(x - size / 2.0, y - adjustedHeight / 2.0); // Bottom-left vertex
     glVertex2f(x + size / 2.0, y - adjustedHeight / 2.0); // Bottom-right vertex
@@ -31,12 +47,20 @@ void drawSquare(float x, float y, float size, float r, float g, float b)
     glEnd();
 }
 
+void drawCircle(float x, float y, float radius, int segments, float r, float g, float b, bool fill)
+{
+    if (fill)
+    {
+        glBegin(GL_TRIANGLE_FAN);
+    }
+    else
+    {
+        glBegin(GL_LINE_LOOP);
+    }
+    glColor3f(r, g, b);
 
-void drawCircle(float x, float y, float radius, int segments, float r, float g, float b) {
-    glBegin(GL_LINE_LOOP);
-    glColor3f(r, g, b); // Set the color
-    
-    for (int i = 0; i <= segments; i++) {
+    for (int i = 0; i <= segments; i++)
+    {
         float angle = 2.0f * M_PI * static_cast<float>(i) / static_cast<float>(segments);
         float dx = radius * cos(angle); // Adjust radius for aspect ratio
         float dy = radius * sin(angle) * ASPECT_RATIO;

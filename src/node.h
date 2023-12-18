@@ -3,6 +3,7 @@
 
 #include "draw.h"
 
+
 /**
  * @brief This class represents a node on screen. Each node has up to four neighbors.
  *
@@ -72,7 +73,7 @@ public:
     Node rightNeighbor();
 
     void draw();
-    void draw(float r, float g, float b);
+    void draw(float r, float g, float b, bool fill);
 
 private:
     Node *up;
@@ -86,6 +87,7 @@ private:
     float trans_y;
 
     bool highlight;
+
 };
 
 #endif
