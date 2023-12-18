@@ -1,8 +1,9 @@
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
-#include "headers.h"
-#include <math.h>
 #include <stdio.h>
+#include <math.h>
+#include "node.h"
+#include "draw.h"
 
 void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
 {
@@ -14,30 +15,34 @@ void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
     glEnd();
 }
 
-void drawSquare(float x, float y, float size)
+void drawSquare(float x, float y, float size, float r, float g, float b)
 {
-    glBegin(GL_QUADS);
-    glVertex2f(x - size / 2.0, y - size / 2.0); // Bottom-left vertex
-    glVertex2f(x + size / 2.0, y - size / 2.0); // Bottom-right vertex
-    glVertex2f(x + size / 2.0, y + size / 2.0); // Top-right vertex
-    glVertex2f(x - size / 2.0, y + size / 2.0); // Top-left vertex
+
+    // Adjust both width and height for aspect ratio
+    float adjustedHeight = size * ASPECT_RATIO;
+
+    glBegin(GL_LINE_LOOP);
+    glColor3f(r, g, b);
+    glVertex2f(x - size / 2.0, y - adjustedHeight / 2.0); // Bottom-left vertex
+    glVertex2f(x + size / 2.0, y - adjustedHeight / 2.0); // Bottom-right vertex
+    glVertex2f(x + size / 2.0, y + adjustedHeight / 2.0); // Top-right vertex
+    glVertex2f(x - size / 2.0, y + adjustedHeight / 2.0); // Top-left vertex
+    glColor3f(1.0f, 1.0f, 1.0f);
     glEnd();
 }
 
-void drawCircle(float center_x, float center_y, float radius, int segments, float r, float g, float b)
-{
-    glBegin(GL_TRIANGLE_FAN);
-    glColor3f(r, g, b);
-    glVertex2d(center_x, center_y); // Center of the circle
 
-    for (int i = 0; i <= segments; ++i)
-    {
+void drawCircle(float x, float y, float radius, int segments, float r, float g, float b) {
+    glBegin(GL_LINE_LOOP);
+    glColor3f(r, g, b); // Set the color
+    
+    for (int i = 0; i <= segments; i++) {
         float angle = 2.0f * M_PI * static_cast<float>(i) / static_cast<float>(segments);
-        float x = radius * std::cos(angle);
-        float y = radius * std::sin(angle);
-        glVertex2f(x + center_x, y + center_y);
+        float dx = radius * cos(angle); // Adjust radius for aspect ratio
+        float dy = radius * sin(angle) * ASPECT_RATIO;
+        glVertex2f(x + dx, y + dy);
     }
-    glColor3f(1.0f, 1.0f, 1.0f);
+
     glEnd();
 }
 
