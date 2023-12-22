@@ -5,8 +5,8 @@
 #define SCREEN_HEIGHT 720.0
 #define ASPECT_RATIO (SCREEN_WIDTH / SCREEN_HEIGHT)
 
-#define WIDTH 25
-#define HEIGHT 16
+#define WIDTH 12
+#define HEIGHT 8
 
 #define X_SPACING (2.0f / WIDTH)
 #define Y_SPACING (2.0f / HEIGHT)

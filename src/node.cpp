@@ -17,22 +17,22 @@ Node::Node(int x, int y)
     linkLeftNeighbor(&nodes[x - 1][y]);
     linkRightNeighbor(&nodes[x + 1][y]);
 
-    // int choice = randInt(0, 3);
-    // switch (choice)
-    // {
-    // case 0:
-    //     linkUpperNeighbor(nullptr);
-    //     break;
-    // case 1:
-    //     linkLowerNeighbor(nullptr);
-    //     break;
-    // case 2:
-    //     linkLeftNeighbor(nullptr);
-    //     break;
-    // case 3:
-    //     linkRightNeighbor(nullptr);
-    //     break;
-    // }
+    int choice = randInt(0, 3);
+    switch (choice)
+    {
+    case 0:
+        linkUpperNeighbor(nullptr);
+        break;
+    case 1:
+        linkLowerNeighbor(nullptr);
+        break;
+    case 2:
+        linkLeftNeighbor(nullptr);
+        break;
+    case 3:
+        linkRightNeighbor(nullptr);
+        break;
+    }
 }
 
 void Node::draw()

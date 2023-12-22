@@ -77,10 +77,9 @@ public:
     int shortest_est = std::numeric_limits<int>::max();
 
     bool explored = false;
-    
+
     int num_of_neighbors;
 
-    Node *back_track; // For when we get stuck
     Node *path_prev; // For when a path is found
 
 private:
@@ -93,7 +92,6 @@ private:
     int y;
     float trans_x;
     float trans_y;
-
 };
 
 void djikstras(Node *src, Node *dest);

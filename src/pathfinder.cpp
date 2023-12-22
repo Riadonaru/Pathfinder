@@ -8,7 +8,6 @@
 void djikstras(Node *src, Node *dest)
 {
     src->shortest_est = 0;
-    src->back_track = nullptr;
     src->path_prev = nullptr;
     _djikstras(src, dest);
 }
@@ -21,10 +20,10 @@ void _djikstras(Node *src, Node *dest)
         src->highlight = 3;
         src->explored = true;
 
-        bool allExplored = true;
-
         Node **neighbors = src->getNeighbors();
         Node *next_node = nullptr;
+
+        bool allExplored = true;
 
         for (int i = 0; i < src->num_of_neighbors; i++)
         {
@@ -36,29 +35,27 @@ void _djikstras(Node *src, Node *dest)
                 neighbors[i]->shortest_est = new_est;
                 neighbors[i]->path_prev = src;
             }
+        }
 
-            if ((next_node == nullptr || neighbors[i]->shortest_est < next_node->shortest_est) && !neighbors[i]->explored)
+        for (int i = 0; i < WIDTH; i++)
+        {
+            for (int j = 0; j < HEIGHT; j++)
             {
-                next_node = neighbors[i];
-                allExplored = false;
+                if ((next_node == nullptr || Node::nodes[i][j].shortest_est < next_node->shortest_est) && !Node::nodes[i][j].explored)
+                {
+                    next_node = &Node::nodes[i][j];
+                    allExplored = false;
+                }
             }
         }
         if (allExplored)
         {
-            next_node = src->back_track;
-        }
-        if (next_node != nullptr)
-        {
-            src->highlight = mem;
-            if (!allExplored)
-            {
-                next_node->back_track = src;
-            }
-            _djikstras(next_node, dest);
+            std::cout << "No path from the source to the given destination..." << std::endl;
         }
         else
         {
-            std::cout << "No path from the source to the given destination..." << std::endl;
+            src->highlight = mem;
+            _djikstras(next_node, dest);
         }
     }
     else
