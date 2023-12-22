@@ -2,7 +2,7 @@
 #define __NODE__
 
 #include "draw.h"
-
+#include "limits"
 
 /**
  * @brief This class represents a node on screen. Each node has up to four neighbors.
@@ -12,12 +12,13 @@ class Node
 {
 public:
     static Node nodes[WIDTH][HEIGHT];
+    static const int dist = 1;
 
     Node()
     {
     }
 
-    Node(int x, int y, bool highlight);
+    Node(int x, int y);
 
     void linkUpperNeighbor(Node *n)
     {
@@ -67,13 +68,20 @@ public:
         }
     }
 
-    Node upperNeighbor();
-    Node lowerNeighbor();
-    Node leftNeighbor();
-    Node rightNeighbor();
+    Node **getNeighbors();
 
     void draw();
     void draw(float r, float g, float b, bool fill);
+
+    int highlight = 0;
+    int shortest_est = std::numeric_limits<int>::max();
+
+    bool explored = false;
+    
+    int num_of_neighbors;
+
+    Node *back_track; // For when we get stuck
+    Node *path_prev; // For when a path is found
 
 private:
     Node *up;
@@ -86,8 +94,9 @@ private:
     float trans_x;
     float trans_y;
 
-    bool highlight;
-
 };
+
+void djikstras(Node *src, Node *dest);
+void _djikstras(Node *src, Node *dest);
 
 #endif

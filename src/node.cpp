@@ -5,11 +5,10 @@
 
 Node Node::nodes[WIDTH][HEIGHT];
 
-Node::Node(int x, int y, bool highlight)
+Node::Node(int x, int y)
 {
     this->x = x;
     this->y = y;
-    this->highlight = highlight;
     trans_x = X_SPACING * (x + 0.5f) - 1.0f;
     trans_y = Y_SPACING * (y + 0.5f) - 1.0f;
 
@@ -18,33 +17,49 @@ Node::Node(int x, int y, bool highlight)
     linkLeftNeighbor(&nodes[x - 1][y]);
     linkRightNeighbor(&nodes[x + 1][y]);
 
-    int choice = randInt(0, 3);
-    switch (choice)
-    {
-    case 0:
-        linkUpperNeighbor(nullptr);
-        break;
-    case 1:
-        linkLowerNeighbor(nullptr);
-        break;
-    case 2:
-        linkLeftNeighbor(nullptr);
-        break;
-    case 3:
-        linkRightNeighbor(nullptr);
-        break;
-    }
+    // int choice = randInt(0, 3);
+    // switch (choice)
+    // {
+    // case 0:
+    //     linkUpperNeighbor(nullptr);
+    //     break;
+    // case 1:
+    //     linkLowerNeighbor(nullptr);
+    //     break;
+    // case 2:
+    //     linkLeftNeighbor(nullptr);
+    //     break;
+    // case 3:
+    //     linkRightNeighbor(nullptr);
+    //     break;
+    // }
 }
 
 void Node::draw()
 {
-    if (highlight)
+
+    switch (highlight)
     {
+    case 1:
         draw(0.0f, 0.0f, 1.0f, true);
-    }
-    else
-    {
-        draw(1.0f, 1.0f, 1.0f, false);
+        break;
+    case 2:
+        draw(1.0f, 0.0f, 0.0f, true);
+        break;
+    case 3:
+        draw(0.0f, 1.0f, 0.0f, true);
+        break;
+
+    default:
+        if (explored)
+        {
+            draw(1.0f, 1.0f, 1.0f, true);
+        }
+        else
+        {
+            draw(1.0f, 1.0f, 1.0f, false);
+        }
+        break;
     }
 }
 
@@ -73,38 +88,48 @@ void Node::draw(float r, float g, float b, bool fill)
     }
 }
 
-Node Node::upperNeighbor()
+Node **Node::getNeighbors()
 {
+    int size = 0;
+    int index = 0;
     if (up != nullptr)
     {
-        return *up;
+        size++;
     }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s upper neighbor was denied because it is null");
-}
-
-Node Node::lowerNeighbor()
-{
     if (down != nullptr)
     {
-        return *down;
+        size++;
     }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s lower neighbor was denied because it is null");
-}
-
-Node Node::leftNeighbor()
-{
     if (left != nullptr)
     {
-        return *left;
+        size++;
     }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s left neighbor was denied because it is null");
-}
-
-Node Node::rightNeighbor()
-{
     if (right != nullptr)
     {
-        return *right;
+        size++;
     }
-    throw std::runtime_error("An attempt to access node (" + std::to_string(x) + ", " + std::to_string(y) + " )'s right neighbor was denied because it is null");
+    num_of_neighbors = size;
+    Node **temp = new Node *[size];
+
+    if (up != nullptr)
+    {
+        temp[index] = up;
+        index++;
+    }
+    if (down != nullptr)
+    {
+        temp[index] = down;
+        index++;
+    }
+    if (left != nullptr)
+    {
+        temp[index] = left;
+        index++;
+    }
+    if (right != nullptr)
+    {
+        temp[index] = right;
+        index++;
+    }
+    return temp;
 }

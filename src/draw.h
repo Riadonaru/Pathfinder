@@ -5,8 +5,8 @@
 #define SCREEN_HEIGHT 720.0
 #define ASPECT_RATIO (SCREEN_WIDTH / SCREEN_HEIGHT)
 
-#define WIDTH 16
-#define HEIGHT 9
+#define WIDTH 25
+#define HEIGHT 16
 
 #define X_SPACING (2.0f / WIDTH)
 #define Y_SPACING (2.0f / HEIGHT)
@@ -16,6 +16,8 @@
 #define TWO_Y_LINESPACE 1.5 * Y_LINESPACE
 #define CIRCLE_RADIOUS (4.0f / (WIDTH * HEIGHT) > 0.02 ? 0.02 : 4.0f / (WIDTH * HEIGHT))
 
+void thread();
+int msleep(long tms);
 int randInt(int min, int max);
 
 void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b);
