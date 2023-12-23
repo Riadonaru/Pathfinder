@@ -12,27 +12,27 @@ Node::Node(int x, int y)
     trans_x = X_SPACING * (x + 0.5f) - 1.0f;
     trans_y = Y_SPACING * (y + 0.5f) - 1.0f;
 
-    linkUpperNeighbor(&nodes[x][y + 1]);
-    linkLowerNeighbor(&nodes[x][y - 1]);
-    linkLeftNeighbor(&nodes[x - 1][y]);
-    linkRightNeighbor(&nodes[x + 1][y]);
+    // linkUpperNeighbor(&nodes[x][y + 1]);
+    // linkLowerNeighbor(&nodes[x][y - 1]);
+    // linkLeftNeighbor(&nodes[x - 1][y]);
+    // linkRightNeighbor(&nodes[x + 1][y]);
 
-    int choice = randInt(0, 3);
-    switch (choice)
-    {
-    case 0:
-        linkUpperNeighbor(nullptr);
-        break;
-    case 1:
-        linkLowerNeighbor(nullptr);
-        break;
-    case 2:
-        linkLeftNeighbor(nullptr);
-        break;
-    case 3:
-        linkRightNeighbor(nullptr);
-        break;
-    }
+    // int choice = randInt(0, 3);
+    // switch (choice)
+    // {
+    // case 0:
+    //     linkUpperNeighbor(nullptr);
+    //     break;
+    // case 1:
+    //     linkLowerNeighbor(nullptr);
+    //     break;
+    // case 2:
+    //     linkLeftNeighbor(nullptr);
+    //     break;
+    // case 3:
+    //     linkRightNeighbor(nullptr);
+    //     break;
+    // }
 }
 
 void Node::draw()
@@ -67,25 +67,28 @@ void Node::draw(float r, float g, float b, bool fill)
 {
     drawSquare(trans_x, trans_y, CIRCLE_RADIOUS, r, g, b, fill);
     // drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 10, r, g, b, fill);
-    if (up != nullptr)
+    if (y + 1 < HEIGHT && up == nullptr)
     {
-        drawLine(trans_x + X_LINESPACE, trans_y + TWO_Y_LINESPACE, up->trans_x + X_LINESPACE, up->trans_y - TWO_Y_LINESPACE, 1.0f, 1.0f, 1.0f);
+        float avg_y = (trans_y + nodes[x][y + 1].trans_y) / 2;
+        drawLine(trans_x + X_LINESPACE, avg_y, trans_x - X_LINESPACE, avg_y, 1.0f, 1.0f, 1.0f);
     }
 
-    if (down != nullptr)
+    if (y > 0 && down == nullptr)
     {
-        drawLine(trans_x - X_LINESPACE, trans_y - TWO_Y_LINESPACE, down->trans_x - X_LINESPACE, down->trans_y + TWO_Y_LINESPACE, 1.0f, 1.0f, 1.0f);
+        float avg_y = (trans_y + nodes[x][y - 1].trans_y) / 2;
+        drawLine(trans_x + X_LINESPACE, avg_y, trans_x - X_LINESPACE, avg_y, 1.0f, 1.0f, 1.0f);
     }
 
-    if (left != nullptr)
+    if (x > 0 && left == nullptr)
     {
-        drawLine(trans_x - TWO_X_LINESPACE, trans_y - Y_LINESPACE, left->trans_x + TWO_X_LINESPACE, left->trans_y - Y_LINESPACE, 1.0f, 1.0f, 1.0f);
+        float avg_x = (trans_x + nodes[x - 1][y].trans_x) / 2;
+        drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, r, g, b);
     }
 
-    if (right != nullptr)
+    if (x + 1 < WIDTH && right == nullptr)
     {
-        drawLine(trans_x + TWO_X_LINESPACE, trans_y + Y_LINESPACE, right->trans_x - TWO_X_LINESPACE, right->trans_y + Y_LINESPACE, 1.0f, 1.0f, 1.0f);
-    }
+        float avg_x = (trans_x + nodes[x + 1][y].trans_x) / 2;
+        drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, r, g, b);    }
 }
 
 Node **Node::getNeighbors()

@@ -20,53 +20,53 @@ public:
 
     Node(int x, int y);
 
-    void linkUpperNeighbor(Node *n)
-    {
-        if (y + 1 < HEIGHT)
-        {
-            this->up = n;
-        }
-        else
-        {
-            this->up = nullptr;
-        }
-    }
+    // void linkUpperNeighbor(Node *n)
+    // {
+    //     if (y + 1 < HEIGHT)
+    //     {
+    //         this->up = n;
+    //     }
+    //     else
+    //     {
+    //         this->up = nullptr;
+    //     }
+    // }
 
-    void linkLowerNeighbor(Node *n)
-    {
-        if (y > 0)
-        {
-            this->down = n;
-        }
-        else
-        {
-            this->down = nullptr;
-        }
-    }
+    // void linkLowerNeighbor(Node *n)
+    // {
+    //     if (y > 0)
+    //     {
+    //         this->down = n;
+    //     }
+    //     else
+    //     {
+    //         this->down = nullptr;
+    //     }
+    // }
 
-    void linkLeftNeighbor(Node *n)
-    {
-        if (x > 0)
-        {
-            this->left = n;
-        }
-        else
-        {
-            this->left = nullptr;
-        }
-    }
+    // void linkLeftNeighbor(Node *n)
+    // {
+    //     if (x > 0)
+    //     {
+    //         this->left = n;
+    //     }
+    //     else
+    //     {
+    //         this->left = nullptr;
+    //     }
+    // }
 
-    void linkRightNeighbor(Node *n)
-    {
-        if (x + 1 < WIDTH)
-        {
-            this->right = n;
-        }
-        else
-        {
-            this->right = nullptr;
-        }
-    }
+    // void linkRightNeighbor(Node *n)
+    // {
+    //     if (x + 1 < WIDTH)
+    //     {
+    //         this->right = n;
+    //     }
+    //     else
+    //     {
+    //         this->right = nullptr;
+    //     }
+    // }
 
     Node **getNeighbors();
 
@@ -83,10 +83,10 @@ public:
     Node *path_prev; // For when a path is found
 
 private:
-    Node *up;
-    Node *down;
-    Node *left;
-    Node *right;
+    Node *up = nullptr;
+    Node *down = nullptr;
+    Node *left = nullptr;
+    Node *right = nullptr;
 
     int x;
     int y;

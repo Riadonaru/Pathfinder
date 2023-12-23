@@ -10,10 +10,8 @@
 
 #define X_SPACING (2.0f / WIDTH)
 #define Y_SPACING (2.0f / HEIGHT)
-#define X_LINESPACE X_SPACING / 10
-#define Y_LINESPACE Y_SPACING / 10
-#define TWO_X_LINESPACE 1.5 * X_LINESPACE
-#define TWO_Y_LINESPACE 1.5 * Y_LINESPACE
+#define X_LINESPACE X_SPACING / 2
+#define Y_LINESPACE Y_SPACING / 2
 #define CIRCLE_RADIOUS (4.0f / (WIDTH * HEIGHT) > 0.02 ? 0.02 : 4.0f / (WIDTH * HEIGHT))
 
 void thread();
