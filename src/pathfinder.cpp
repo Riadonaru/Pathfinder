@@ -5,8 +5,23 @@
 #include <random>
 #include <iostream>
 
-void djikstras(Node *src, Node *dest)
+void djikstras()
 {
+    int x = randInt(0, WIDTH - 1);
+    int y = randInt(0, HEIGHT - 1);
+
+    int dx, dy;
+
+    do
+    {
+        dx = randInt(0, WIDTH - 1);
+        dy = randInt(0, HEIGHT - 1);
+    } while (x == dx && y == dy);
+
+    Node *src = &Node::nodes[x][y];
+    Node *dest = &Node::nodes[dx][dy];
+    src->highlight = 1;  // Blue color
+    dest->highlight = 2; // Red color
     src->shortest_est = 0;
     src->path_prev = nullptr;
     _djikstras(src, dest);
@@ -72,22 +87,12 @@ void _djikstras(Node *src, Node *dest)
 
 void thread()
 {
-    int x = randInt(0, WIDTH - 1);
-    int y = randInt(0, HEIGHT - 1);
-
-    int dx, dy;
-
-    do
-    {
-        dx = randInt(0, WIDTH - 1);
-        dy = randInt(0, HEIGHT - 1);
-    } while (x == dx && y == dy);
-
-    Node *src = &Node::nodes[x][y];
-    Node *dest = &Node::nodes[dx][dy];
-    src->highlight = 1;  // Blue color
-    dest->highlight = 2; // Red color
-    djikstras(src, dest);
+    // djikstras();
+    Node *myNode = &Node::nodes[3][3];
+    myNode->linkRight();
+    myNode->linkLeft();
+    myNode->linkUp();
+    myNode->linkDown();
 }
 
 int msleep(long tms)

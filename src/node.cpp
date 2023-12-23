@@ -11,28 +11,6 @@ Node::Node(int x, int y)
     this->y = y;
     trans_x = X_SPACING * (x + 0.5f) - 1.0f;
     trans_y = Y_SPACING * (y + 0.5f) - 1.0f;
-
-    // linkUpperNeighbor(&nodes[x][y + 1]);
-    // linkLowerNeighbor(&nodes[x][y - 1]);
-    // linkLeftNeighbor(&nodes[x - 1][y]);
-    // linkRightNeighbor(&nodes[x + 1][y]);
-
-    // int choice = randInt(0, 3);
-    // switch (choice)
-    // {
-    // case 0:
-    //     linkUpperNeighbor(nullptr);
-    //     break;
-    // case 1:
-    //     linkLowerNeighbor(nullptr);
-    //     break;
-    // case 2:
-    //     linkLeftNeighbor(nullptr);
-    //     break;
-    // case 3:
-    //     linkRightNeighbor(nullptr);
-    //     break;
-    // }
 }
 
 void Node::draw()
@@ -82,13 +60,14 @@ void Node::draw(float r, float g, float b, bool fill)
     if (x > 0 && left == nullptr)
     {
         float avg_x = (trans_x + nodes[x - 1][y].trans_x) / 2;
-        drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, r, g, b);
+        drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, 1.0f, 1.0f, 1.0f);
     }
 
     if (x + 1 < WIDTH && right == nullptr)
     {
         float avg_x = (trans_x + nodes[x + 1][y].trans_x) / 2;
-        drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, r, g, b);    }
+        drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, 1.0f, 1.0f, 1.0f);
+    }
 }
 
 Node **Node::getNeighbors()
@@ -135,4 +114,40 @@ Node **Node::getNeighbors()
         index++;
     }
     return temp;
+}
+
+void Node::linkUp()
+{
+    if (y + 1 < HEIGHT)
+    {
+        up = &nodes[x][y + 1];
+        up->down = this;
+    }
+}
+
+void Node::linkDown()
+{
+    if (y > 0)
+    {
+        down = &nodes[x][y - 1];
+        down->up = this;
+    }
+}
+
+void Node::linkLeft()
+{
+    if (x > 0)
+    {
+        left = &nodes[x - 1][y];
+        left->right = this;
+    }
+}
+
+void Node::linkRight()
+{
+    if (x + 1 < WIDTH)
+    {
+        right = &nodes[x + 1][y];
+        right->left = this;
+    }
 }

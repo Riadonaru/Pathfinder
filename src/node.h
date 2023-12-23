@@ -20,58 +20,16 @@ public:
 
     Node(int x, int y);
 
-    // void linkUpperNeighbor(Node *n)
-    // {
-    //     if (y + 1 < HEIGHT)
-    //     {
-    //         this->up = n;
-    //     }
-    //     else
-    //     {
-    //         this->up = nullptr;
-    //     }
-    // }
-
-    // void linkLowerNeighbor(Node *n)
-    // {
-    //     if (y > 0)
-    //     {
-    //         this->down = n;
-    //     }
-    //     else
-    //     {
-    //         this->down = nullptr;
-    //     }
-    // }
-
-    // void linkLeftNeighbor(Node *n)
-    // {
-    //     if (x > 0)
-    //     {
-    //         this->left = n;
-    //     }
-    //     else
-    //     {
-    //         this->left = nullptr;
-    //     }
-    // }
-
-    // void linkRightNeighbor(Node *n)
-    // {
-    //     if (x + 1 < WIDTH)
-    //     {
-    //         this->right = n;
-    //     }
-    //     else
-    //     {
-    //         this->right = nullptr;
-    //     }
-    // }
-
     Node **getNeighbors();
 
     void draw();
     void draw(float r, float g, float b, bool fill);
+    
+    void linkUp();
+    void linkDown();
+    void linkLeft();
+    void linkRight();
+
 
     int highlight = 0;
     int shortest_est = std::numeric_limits<int>::max();
@@ -94,7 +52,7 @@ private:
     float trans_y;
 };
 
-void djikstras(Node *src, Node *dest);
+void djikstras();
 void _djikstras(Node *src, Node *dest);
 
 #endif

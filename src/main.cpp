@@ -69,7 +69,7 @@ int main()
         }
     }
 
-    // std::thread myThread(thread);
+    std::thread myThread(thread);
 
     GLFWwindow *window;
 
