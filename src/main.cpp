@@ -5,7 +5,6 @@
 #include "draw.h"
 #include <thread>
 
-
 void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
 {
     glBegin(GL_LINES);
@@ -69,7 +68,7 @@ int main()
         }
     }
 
-    std::thread myThread(thread);
+    std::thread myThread(algo);
 
     GLFWwindow *window;
 

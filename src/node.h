@@ -24,17 +24,17 @@ public:
 
     void draw();
     void draw(float r, float g, float b, bool fill);
-    
-    void linkUp();
-    void linkDown();
-    void linkLeft();
-    void linkRight();
 
+    Node *linkUp();
+    Node *linkDown();
+    Node *linkLeft();
+    Node *linkRight();
 
     int highlight = 0;
     int shortest_est = std::numeric_limits<int>::max();
 
     bool explored = false;
+    bool visited = false;
 
     int num_of_neighbors;
 
@@ -54,5 +54,7 @@ private:
 
 void djikstras();
 void _djikstras(Node *src, Node *dest);
+
+Node *link(Node *myNode);
 
 #endif

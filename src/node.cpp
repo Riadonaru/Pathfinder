@@ -43,7 +43,10 @@ void Node::draw()
 
 void Node::draw(float r, float g, float b, bool fill)
 {
-    drawSquare(trans_x, trans_y, CIRCLE_RADIOUS, r, g, b, fill);
+    if (fill)
+    {
+        drawSquare(trans_x, trans_y, CIRCLE_RADIOUS, r, g, b, fill);
+    }
     // drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 10, r, g, b, fill);
     if (y + 1 < HEIGHT && up == nullptr)
     {
@@ -116,38 +119,46 @@ Node **Node::getNeighbors()
     return temp;
 }
 
-void Node::linkUp()
+Node *Node::linkUp()
 {
-    if (y + 1 < HEIGHT)
+    if (y + 1 < HEIGHT && nodes[x][y + 1].visited == false)
     {
         up = &nodes[x][y + 1];
         up->down = this;
+        return up;
     }
+    return nullptr;
 }
 
-void Node::linkDown()
+Node *Node::linkDown()
 {
-    if (y > 0)
+    if (y > 0 && nodes[x][y - 1].visited == false)
     {
         down = &nodes[x][y - 1];
         down->up = this;
+        return down;
     }
+    return nullptr;
 }
 
-void Node::linkLeft()
+Node *Node::linkLeft()
 {
-    if (x > 0)
+    if (x > 0 && nodes[x - 1][y].visited == false)
     {
         left = &nodes[x - 1][y];
         left->right = this;
+        return left;
     }
+    return nullptr;
 }
 
-void Node::linkRight()
+Node *Node::linkRight()
 {
-    if (x + 1 < WIDTH)
+    if (x + 1 < WIDTH && nodes[x + 1][y].visited == false)
     {
         right = &nodes[x + 1][y];
         right->left = this;
+        return right;
     }
+    return nullptr;
 }

@@ -4,22 +4,13 @@
 #include <ctime>
 #include <random>
 #include <iostream>
+#include <stack>
 
 void djikstras()
 {
-    int x = randInt(0, WIDTH - 1);
-    int y = randInt(0, HEIGHT - 1);
 
-    int dx, dy;
-
-    do
-    {
-        dx = randInt(0, WIDTH - 1);
-        dy = randInt(0, HEIGHT - 1);
-    } while (x == dx && y == dy);
-
-    Node *src = &Node::nodes[x][y];
-    Node *dest = &Node::nodes[dx][dy];
+    Node *src = &Node::nodes[0][0];
+    Node *dest = &Node::nodes[WIDTH - 1][HEIGHT - 1];
     src->highlight = 1;  // Blue color
     dest->highlight = 2; // Red color
     src->shortest_est = 0;
@@ -42,7 +33,7 @@ void _djikstras(Node *src, Node *dest)
 
         for (int i = 0; i < src->num_of_neighbors; i++)
         {
-            msleep(50);
+            msleep(10);
             int new_est = src->shortest_est + Node::dist;
 
             if (new_est < neighbors[i]->shortest_est)
@@ -85,14 +76,97 @@ void _djikstras(Node *src, Node *dest)
     }
 }
 
-void thread()
+void algo()
 {
-    // djikstras();
-    Node *myNode = &Node::nodes[3][3];
-    myNode->linkRight();
-    myNode->linkLeft();
-    myNode->linkUp();
-    myNode->linkDown();
+    Node *myNode = &Node::nodes[0][0];
+    std::stack<Node *> history;
+    int total_visited = 0;
+    while (total_visited < WIDTH * HEIGHT)
+    {
+        myNode->highlight = true;
+        if (!myNode->visited)
+        {
+            myNode->visited = true;
+            total_visited++;
+        }
+        history.push(myNode);
+        msleep(5);
+        myNode->highlight = false;
+        myNode = link(myNode);
+        if (myNode == nullptr)
+        {
+            history.pop();
+            myNode = history.top();
+            history.pop();
+        }
+    }
+
+    std::cout << "Maze generated... Prepering solver;" << std::endl;
+    msleep(2000);
+    djikstras();
+    std::cout << "Maze Solved... Showing solution;" << std::endl;
+    msleep(2000);
+
+    for (int i = 0; i < HEIGHT; i++)
+    {
+        for (int j = 0; j < WIDTH; j++)
+        {
+            Node::nodes[j][i].explored = false;
+            Node::nodes[j][i].visited = false;
+        }
+    }
+}
+
+Node *link(Node *myNode)
+{
+    Node *res;
+    int selected[] = {-1, -1, -1, -1};
+    int index = 0;
+    bool present = false;
+    do
+    {
+        int dir = randInt(0, 3);
+        present = false;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (selected[i] == dir)
+            {
+                present = true;
+            }
+        }
+
+        if (!present)
+        {
+            selected[index] = dir;
+            index++;
+
+            switch (dir)
+            {
+            case 1:
+                res = myNode->linkDown();
+                break;
+            case 2:
+                res = myNode->linkRight();
+                break;
+            case 3:
+                res = myNode->linkLeft();
+                break;
+            default:
+                res = myNode->linkUp();
+                break;
+            }
+        }
+        else
+        {
+            if (index == 4)
+            {
+                return nullptr;
+            }
+        }
+
+    } while (res == nullptr);
+    return res;
 }
 
 int msleep(long tms)

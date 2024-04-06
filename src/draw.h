@@ -5,8 +5,8 @@
 #define SCREEN_HEIGHT 720.0
 #define ASPECT_RATIO (SCREEN_WIDTH / SCREEN_HEIGHT)
 
-#define WIDTH 12
-#define HEIGHT 8
+#define WIDTH 32
+#define HEIGHT 16
 
 #define X_SPACING (2.0f / WIDTH)
 #define Y_SPACING (2.0f / HEIGHT)
@@ -14,7 +14,7 @@
 #define Y_LINESPACE Y_SPACING / 2
 #define CIRCLE_RADIOUS (4.0f / (WIDTH * HEIGHT) > 0.02 ? 0.02 : 4.0f / (WIDTH * HEIGHT))
 
-void thread();
+void algo();
 int msleep(long tms);
 int randInt(int min, int max);
 
