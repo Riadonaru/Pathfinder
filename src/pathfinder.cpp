@@ -4,6 +4,7 @@
 #include <ctime>
 #include <random>
 #include <iostream>
+#include <stdio.h>
 #include <stack>
 
 void djikstras()
@@ -33,7 +34,7 @@ void _djikstras(Node *src, Node *dest)
 
         for (int i = 0; i < src->num_of_neighbors; i++)
         {
-            msleep(10);
+            msleep(DELAY);
             int new_est = src->shortest_est + Node::dist;
 
             if (new_est < neighbors[i]->shortest_est)
@@ -76,7 +77,7 @@ void _djikstras(Node *src, Node *dest)
     }
 }
 
-void algo()
+void mazer()
 {
     Node *myNode = &Node::nodes[0][0];
     std::stack<Node *> history;
@@ -90,7 +91,7 @@ void algo()
             total_visited++;
         }
         history.push(myNode);
-        msleep(5);
+        msleep(DELAY);
         myNode->highlight = false;
         myNode = link(myNode);
         if (myNode == nullptr)
@@ -100,13 +101,12 @@ void algo()
             history.pop();
         }
     }
+}
 
-    std::cout << "Maze generated... Prepering solver;" << std::endl;
-    msleep(2000);
+void events()
+{
+    mazer();
     djikstras();
-    std::cout << "Maze Solved... Showing solution;" << std::endl;
-    msleep(2000);
-
     for (int i = 0; i < HEIGHT; i++)
     {
         for (int j = 0; j < WIDTH; j++)
@@ -114,8 +114,7 @@ void algo()
             Node::nodes[j][i].explored = false;
             Node::nodes[j][i].visited = false;
         }
-    }
-}
+    }}
 
 Node *link(Node *myNode)
 {

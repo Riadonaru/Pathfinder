@@ -1,20 +1,24 @@
 #ifndef __DRAW__
 #define __DRAW__
 
-#define SCREEN_WIDTH 1280.0
-#define SCREEN_HEIGHT 720.0
+#define SCREEN_WIDTH 1600.0
+#define SCREEN_HEIGHT 900.0
 #define ASPECT_RATIO (SCREEN_WIDTH / SCREEN_HEIGHT)
 
-#define WIDTH 32
-#define HEIGHT 16
+#define SCALE 2
+
+#define WIDTH (16 * SCALE)
+#define HEIGHT (9 * SCALE)
+#define DELAY 0
 
 #define X_SPACING (2.0f / WIDTH)
 #define Y_SPACING (2.0f / HEIGHT)
 #define X_LINESPACE X_SPACING / 2
 #define Y_LINESPACE Y_SPACING / 2
-#define CIRCLE_RADIOUS (4.0f / (WIDTH * HEIGHT) > 0.02 ? 0.02 : 4.0f / (WIDTH * HEIGHT))
+#define CIRCLE_RADIOUS ((1.0f / (float)(50 * SCALE)) < 0.0025 ? 0.0025 : (1.0f / (float)(50 * SCALE)))
 
-void algo();
+void events();
+
 int msleep(long tms);
 int randInt(int min, int max);
 

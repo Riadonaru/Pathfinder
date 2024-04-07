@@ -46,8 +46,8 @@ void Node::draw(float r, float g, float b, bool fill)
     if (fill)
     {
         drawSquare(trans_x, trans_y, CIRCLE_RADIOUS, r, g, b, fill);
+        // drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 30, r, g, b, fill);
     }
-    // drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 10, r, g, b, fill);
     if (y + 1 < HEIGHT && up == nullptr)
     {
         float avg_y = (trans_y + nodes[x][y + 1].trans_y) / 2;

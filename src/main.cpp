@@ -58,6 +58,13 @@ void drawCircle(float x, float y, float radius, int segments, float r, float g, 
     glEnd();
 }
 
+static void on_click(GLFWwindow *window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+    }
+}
+
 int main()
 {
     for (int i = 0; i < HEIGHT; i++)
@@ -68,21 +75,22 @@ int main()
         }
     }
 
-    std::thread myThread(algo);
-
     GLFWwindow *window;
 
     if (!glfwInit())
         return -1;
 
-    window = glfwCreateWindow(1280, 720, "Pathfinding Example", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pathfinding Example", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
         return -1;
     }
 
+    std::thread myThread(events);
+
     glfwMakeContextCurrent(window);
+    glfwSetMouseButtonCallback(window, on_click);
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
