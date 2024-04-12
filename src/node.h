@@ -33,8 +33,10 @@ public:
     Node *linkRight();
 
     int highlight = 0;
-    int shortest_est = std::numeric_limits<int>::max();
-    int dist_from_dest = std::numeric_limits<int>::max();
+    int start_dist = std::numeric_limits<int>::max();
+    
+    float end_dist = std::numeric_limits<float>::max();
+    float aScore = std::numeric_limits<float>::max();
 
     bool explored = false;
     bool visited = false;
@@ -55,6 +57,9 @@ private:
 
 void djikstras();
 void _djikstras(Node *src, Node *dest);
+
+void aStar();
+void _aStar(Node *src, Node *dest);
 
 Node *link(Node *myNode);
 

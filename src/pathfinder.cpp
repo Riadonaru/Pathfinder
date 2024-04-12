@@ -10,11 +10,11 @@
 void djikstras()
 {
 
-    Node *src = &Node::nodes[0][0];
+    Node *src = &Node::nodes[7 * SCALE][4 * SCALE];
     Node *dest = &Node::nodes[WIDTH - 1][HEIGHT - 1];
     src->highlight = 1;  // Blue color
     dest->highlight = 2; // Red color
-    src->shortest_est = 0;
+    src->start_dist = 0;
     src->path_prev = nullptr;
     _djikstras(src, dest);
 }
@@ -37,12 +37,12 @@ void _djikstras(Node *src, Node *dest)
         {
             if (src->links[i])
             {
-                int new_est = src->shortest_est + Node::dist;
+                int new_est = src->start_dist + Node::dist;
                 Node *neighbor = neighbors[i];
 
-                if (new_est < neighbor->shortest_est)
+                if (new_est < neighbor->start_dist)
                 {
-                    neighbor->shortest_est = new_est;
+                    neighbor->start_dist = new_est;
                     neighbor->path_prev = src;
                 }
             }
@@ -52,7 +52,7 @@ void _djikstras(Node *src, Node *dest)
         {
             for (int j = 0; j < HEIGHT; j++)
             {
-                if ((next_node == nullptr || Node::nodes[i][j].shortest_est < next_node->shortest_est) && !Node::nodes[i][j].explored)
+                if ((next_node == nullptr || Node::nodes[i][j].start_dist < next_node->start_dist) && !Node::nodes[i][j].explored)
                 {
                     next_node = &Node::nodes[i][j];
                     allExplored = false;
@@ -81,8 +81,83 @@ void _djikstras(Node *src, Node *dest)
     }
 }
 
-void aStar() {
-    
+void aStar()
+{
+    Node *src = &Node::nodes[7 * SCALE][4 * SCALE];
+    Node *dest = &Node::nodes[WIDTH - 1][HEIGHT - 1];
+    src->highlight = 1;  // Blue color
+    dest->highlight = 2; // Red color
+    src->start_dist = 0;
+    src->path_prev = nullptr;
+    _aStar(src, dest);
+}
+
+void _aStar(Node *src, Node *dest)
+{
+    if (src != dest)
+    {
+
+        // Setup
+        int mem = src->highlight;
+        src->highlight = 3;
+        src->explored = true;
+
+        Node *next_node = nullptr;
+        Node *neighbors[4] = {&Node::nodes[src->getX()][src->getY() + 1], &Node::nodes[src->getX()][src->getY() - 1], &Node::nodes[src->getX() - 1][src->getY()], &Node::nodes[src->getX() + 1][src->getY()]};
+
+        bool allExplored = true;
+
+        msleep(DELAY);
+
+        // Updating estimates
+        for (int i = 0; i < 4; i++)
+        {
+            if (src->links[i])
+            {
+                int new_est = src->start_dist + Node::dist;
+
+                if (new_est < neighbors[i]->start_dist)
+                {
+                    neighbors[i]->start_dist = new_est;
+                    neighbors[i]->aScore = new_est + neighbors[i]->end_dist;
+                    neighbors[i]->path_prev = src;
+                }
+            }
+        }
+
+        // Choosing next node to explore.
+        for (int i = 0; i < WIDTH; i++)
+        {
+            for (int j = 0; j < HEIGHT; j++)
+            {
+                if ((next_node == nullptr || Node::nodes[i][j].aScore < next_node->aScore) && !Node::nodes[i][j].explored)
+                {
+                    next_node = &Node::nodes[i][j];
+                    allExplored = false;
+                }
+            }
+        }
+
+        if (allExplored)
+        {
+            std::cout << "No path from the source to the given destination..." << std::endl;
+        }
+        else
+        {
+            src->highlight = mem;
+            _aStar(next_node, dest);
+        }
+    }
+    else
+    {
+        std::cout << "Found path!" << std::endl;
+        Node *temp = src->path_prev;
+        while (temp->path_prev != nullptr)
+        {
+            temp->highlight = 3;
+            temp = temp->path_prev;
+        }
+    }
 }
 
 void rdfSearch()
@@ -114,15 +189,12 @@ void rdfSearch()
 void events()
 {
     rdfSearch();
+    aStar();
+    msleep(2000);
+    hardReset();
     djikstras();
-    for (int i = 0; i < HEIGHT; i++)
-    {
-        for (int j = 0; j < WIDTH; j++)
-        {
-            Node::nodes[j][i].explored = false;
-            Node::nodes[j][i].visited = false;
-        }
-    }
+    msleep(1000);
+    softReset();
 }
 
 Node *link(Node *myNode)
@@ -173,6 +245,36 @@ Node *link(Node *myNode)
         res = myNode->linkRight();
     }
     return res;
+}
+
+void hardReset()
+{
+    for (int i = 0; i < HEIGHT; i++)
+    {
+        for (int j = 0; j < WIDTH; j++)
+        {
+            Node::nodes[j][i].highlight = 0;
+
+            Node::nodes[j][i].explored = false;
+            Node::nodes[j][i].visited = false;
+
+            Node::nodes[j][i].start_dist = std::numeric_limits<int>::max();
+            Node::nodes[j][i].end_dist = std::numeric_limits<float>::max();
+            Node::nodes[j][i].aScore = std::numeric_limits<float>::max();
+        }
+    }
+}
+
+void softReset()
+{
+    for (int i = 0; i < HEIGHT; i++)
+    {
+        for (int j = 0; j < WIDTH; j++)
+        {
+            Node::nodes[j][i].explored = false;
+            Node::nodes[j][i].visited = false;
+        }
+    }
 }
 
 int msleep(long tms)

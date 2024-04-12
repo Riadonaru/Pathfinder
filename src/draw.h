@@ -5,11 +5,11 @@
 #define SCREEN_HEIGHT 900.0
 #define ASPECT_RATIO (SCREEN_WIDTH / SCREEN_HEIGHT)
 
-#define SCALE 1
+#define SCALE 2
 
 #define WIDTH (16 * SCALE)
 #define HEIGHT (9 * SCALE)
-#define DELAY 10
+#define DELAY 20
 
 #define X_SPACING (2.0f / WIDTH)
 #define Y_SPACING (2.0f / HEIGHT)
@@ -18,6 +18,9 @@
 #define CIRCLE_RADIOUS ((1.0f / (float)(50 * SCALE)) < 0.0025 ? 0.0025 : (1.0f / (float)(50 * SCALE)))
 
 void events();
+
+void hardReset();
+void softReset();
 
 int msleep(long tms);
 int randInt(int min, int max);

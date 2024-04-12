@@ -11,7 +11,9 @@ Node::Node(int x, int y)
     this->y = y;
     trans_x = X_SPACING * (x + 0.5f) - 1.0f;
     trans_y = Y_SPACING * (y + 0.5f) - 1.0f;
-
+    
+    end_dist = ((WIDTH - x) * (WIDTH - x) + (HEIGHT - y) * (HEIGHT - y));
+    
     if (y + 1 < HEIGHT)
     {
         neighbors.push(&Node::nodes[x][y + 1]);
