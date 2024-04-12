@@ -61,6 +61,8 @@ void _djikstras(Node *src, Node *dest);
 void aStar();
 void _aStar(Node *src, Node *dest);
 
+void rdfSearch();
+
 Node *link(Node *myNode);
 
 #endif

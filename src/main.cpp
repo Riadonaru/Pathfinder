@@ -4,6 +4,11 @@
 #include "node.h"
 #include "draw.h"
 #include <thread>
+#include <iostream>
+
+int click_index = 0;
+
+bool running = false;
 
 void drawLine(float x1, float y1, float x2, float y2, float r, float g, float b)
 {
@@ -60,8 +65,9 @@ void drawCircle(float x, float y, float radius, int segments, float r, float g, 
 
 static void on_click(GLFWwindow *window, int button, int action, int mods)
 {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !running)
     {
+        click_index++;
     }
 }
 

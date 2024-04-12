@@ -10,13 +10,15 @@
 void djikstras()
 {
 
-    Node *src = &Node::nodes[7 * SCALE][4 * SCALE];
+    Node *src = &Node::nodes[0][0];
     Node *dest = &Node::nodes[WIDTH - 1][HEIGHT - 1];
     src->highlight = 1;  // Blue color
     dest->highlight = 2; // Red color
     src->start_dist = 0;
     src->path_prev = nullptr;
     _djikstras(src, dest);
+    msleep(1000);
+    showPath();
 }
 
 void _djikstras(Node *src, Node *dest)
@@ -83,13 +85,15 @@ void _djikstras(Node *src, Node *dest)
 
 void aStar()
 {
-    Node *src = &Node::nodes[7 * SCALE][4 * SCALE];
+    Node *src = &Node::nodes[0][0];
     Node *dest = &Node::nodes[WIDTH - 1][HEIGHT - 1];
     src->highlight = 1;  // Blue color
     dest->highlight = 2; // Red color
     src->start_dist = 0;
     src->path_prev = nullptr;
     _aStar(src, dest);
+    msleep(1000);
+    showPath();
 }
 
 void _aStar(Node *src, Node *dest)
@@ -186,17 +190,6 @@ void rdfSearch()
     }
 }
 
-void events()
-{
-    rdfSearch();
-    aStar();
-    msleep(2000);
-    hardReset();
-    djikstras();
-    msleep(1000);
-    softReset();
-}
-
 Node *link(Node *myNode)
 {
     Node *temp;
@@ -245,65 +238,4 @@ Node *link(Node *myNode)
         res = myNode->linkRight();
     }
     return res;
-}
-
-void hardReset()
-{
-    for (int i = 0; i < HEIGHT; i++)
-    {
-        for (int j = 0; j < WIDTH; j++)
-        {
-            Node::nodes[j][i].highlight = 0;
-
-            Node::nodes[j][i].explored = false;
-            Node::nodes[j][i].visited = false;
-
-            Node::nodes[j][i].start_dist = std::numeric_limits<int>::max();
-            Node::nodes[j][i].end_dist = std::numeric_limits<float>::max();
-            Node::nodes[j][i].aScore = std::numeric_limits<float>::max();
-        }
-    }
-}
-
-void softReset()
-{
-    for (int i = 0; i < HEIGHT; i++)
-    {
-        for (int j = 0; j < WIDTH; j++)
-        {
-            Node::nodes[j][i].explored = false;
-            Node::nodes[j][i].visited = false;
-        }
-    }
-}
-
-int msleep(long tms)
-{
-    struct timespec ts;
-    int ret;
-
-    if (tms < 0)
-    {
-        errno = EINVAL;
-        return -1;
-    }
-
-    ts.tv_sec = tms / 1000;
-    ts.tv_nsec = (tms % 1000) * 1000000;
-
-    do
-    {
-        ret = nanosleep(&ts, &ts);
-    } while (ret && errno == EINTR);
-
-    return ret;
-}
-
-int randInt(int min, int max)
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    std::uniform_int_distribution<int> distribution(min, max);
-    return distribution(gen);
 }
