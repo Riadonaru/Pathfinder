@@ -11,6 +11,26 @@ Node::Node(int x, int y)
     this->y = y;
     trans_x = X_SPACING * (x + 0.5f) - 1.0f;
     trans_y = Y_SPACING * (y + 0.5f) - 1.0f;
+
+    if (y + 1 < HEIGHT)
+    {
+        neighbors.push(&Node::nodes[x][y + 1]);
+    }
+
+    if (y > 0)
+    {
+        neighbors.push(&Node::nodes[x][y - 1]);
+    }
+
+    if (x > 0)
+    {
+        neighbors.push(&Node::nodes[x - 1][y]);
+    }
+
+    if (x + 1 < WIDTH)
+    {
+        neighbors.push(&Node::nodes[x + 1][y]);
+    }
 }
 
 void Node::draw()
@@ -48,84 +68,48 @@ void Node::draw(float r, float g, float b, bool fill)
         drawSquare(trans_x, trans_y, CIRCLE_RADIOUS, r, g, b, fill);
         // drawCircle(trans_x, trans_y, CIRCLE_RADIOUS, 30, r, g, b, fill);
     }
-    if (y + 1 < HEIGHT && up == nullptr)
+    if (y + 1 < HEIGHT && !links[0])
     {
         float avg_y = (trans_y + nodes[x][y + 1].trans_y) / 2;
         drawLine(trans_x + X_LINESPACE, avg_y, trans_x - X_LINESPACE, avg_y, 1.0f, 1.0f, 1.0f);
     }
 
-    if (y > 0 && down == nullptr)
+    if (y > 0 && !links[1])
     {
         float avg_y = (trans_y + nodes[x][y - 1].trans_y) / 2;
         drawLine(trans_x + X_LINESPACE, avg_y, trans_x - X_LINESPACE, avg_y, 1.0f, 1.0f, 1.0f);
     }
 
-    if (x > 0 && left == nullptr)
+    if (x > 0 && !links[2])
     {
         float avg_x = (trans_x + nodes[x - 1][y].trans_x) / 2;
         drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, 1.0f, 1.0f, 1.0f);
     }
 
-    if (x + 1 < WIDTH && right == nullptr)
+    if (x + 1 < WIDTH && !links[3])
     {
         float avg_x = (trans_x + nodes[x + 1][y].trans_x) / 2;
         drawLine(avg_x, trans_y + Y_LINESPACE, avg_x, trans_y - Y_LINESPACE, 1.0f, 1.0f, 1.0f);
     }
 }
 
-Node **Node::getNeighbors()
+int Node::getX()
 {
-    int size = 0;
-    int index = 0;
-    if (up != nullptr)
-    {
-        size++;
-    }
-    if (down != nullptr)
-    {
-        size++;
-    }
-    if (left != nullptr)
-    {
-        size++;
-    }
-    if (right != nullptr)
-    {
-        size++;
-    }
-    num_of_neighbors = size;
-    Node **temp = new Node *[size];
+    return x;
+}
 
-    if (up != nullptr)
-    {
-        temp[index] = up;
-        index++;
-    }
-    if (down != nullptr)
-    {
-        temp[index] = down;
-        index++;
-    }
-    if (left != nullptr)
-    {
-        temp[index] = left;
-        index++;
-    }
-    if (right != nullptr)
-    {
-        temp[index] = right;
-        index++;
-    }
-    return temp;
+int Node::getY()
+{
+    return y;
 }
 
 Node *Node::linkUp()
 {
     if (y + 1 < HEIGHT && nodes[x][y + 1].visited == false)
     {
-        up = &nodes[x][y + 1];
-        up->down = this;
-        return up;
+        links[0] = true;
+        (&nodes[x][y + 1])->links[1] = true;
+        return (&nodes[x][y + 1]);
     }
     return nullptr;
 }
@@ -134,9 +118,9 @@ Node *Node::linkDown()
 {
     if (y > 0 && nodes[x][y - 1].visited == false)
     {
-        down = &nodes[x][y - 1];
-        down->up = this;
-        return down;
+        links[1] = true;
+        (&nodes[x][y - 1])->links[0] = true;
+        return (&nodes[x][y - 1]);
     }
     return nullptr;
 }
@@ -145,9 +129,9 @@ Node *Node::linkLeft()
 {
     if (x > 0 && nodes[x - 1][y].visited == false)
     {
-        left = &nodes[x - 1][y];
-        left->right = this;
-        return left;
+        links[2] = true;
+        (&nodes[x - 1][y])->links[3] = true;
+        return (&nodes[x - 1][y]);
     }
     return nullptr;
 }
@@ -156,9 +140,9 @@ Node *Node::linkRight()
 {
     if (x + 1 < WIDTH && nodes[x + 1][y].visited == false)
     {
-        right = &nodes[x + 1][y];
-        right->left = this;
-        return right;
+        links[3] = true;
+        (&nodes[x + 1][y])->links[2] = true;
+        return (&nodes[x + 1][y]);
     }
     return nullptr;
 }

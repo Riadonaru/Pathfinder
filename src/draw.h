@@ -5,11 +5,11 @@
 #define SCREEN_HEIGHT 900.0
 #define ASPECT_RATIO (SCREEN_WIDTH / SCREEN_HEIGHT)
 
-#define SCALE 2
+#define SCALE 1
 
 #define WIDTH (16 * SCALE)
 #define HEIGHT (9 * SCALE)
-#define DELAY 0
+#define DELAY 10
 
 #define X_SPACING (2.0f / WIDTH)
 #define Y_SPACING (2.0f / HEIGHT)

@@ -27,20 +27,24 @@ void _djikstras(Node *src, Node *dest)
         src->highlight = 3;
         src->explored = true;
 
-        Node **neighbors = src->getNeighbors();
         Node *next_node = nullptr;
+        Node *neighbors[4] = {&Node::nodes[src->getX()][src->getY() + 1], &Node::nodes[src->getX()][src->getY() - 1], &Node::nodes[src->getX() - 1][src->getY()], &Node::nodes[src->getX() + 1][src->getY()]};
 
         bool allExplored = true;
 
-        for (int i = 0; i < src->num_of_neighbors; i++)
+        msleep(DELAY);
+        for (int i = 0; i < 4; i++)
         {
-            msleep(DELAY);
-            int new_est = src->shortest_est + Node::dist;
-
-            if (new_est < neighbors[i]->shortest_est)
+            if (src->links[i])
             {
-                neighbors[i]->shortest_est = new_est;
-                neighbors[i]->path_prev = src;
+                int new_est = src->shortest_est + Node::dist;
+                Node *neighbor = neighbors[i];
+
+                if (new_est < neighbor->shortest_est)
+                {
+                    neighbor->shortest_est = new_est;
+                    neighbor->path_prev = src;
+                }
             }
         }
 
@@ -77,7 +81,11 @@ void _djikstras(Node *src, Node *dest)
     }
 }
 
-void mazer()
+void aStar() {
+    
+}
+
+void rdfSearch()
 {
     Node *myNode = &Node::nodes[0][0];
     std::stack<Node *> history;
@@ -105,7 +113,7 @@ void mazer()
 
 void events()
 {
-    mazer();
+    rdfSearch();
     djikstras();
     for (int i = 0; i < HEIGHT; i++)
     {
@@ -114,57 +122,56 @@ void events()
             Node::nodes[j][i].explored = false;
             Node::nodes[j][i].visited = false;
         }
-    }}
+    }
+}
 
 Node *link(Node *myNode)
 {
-    Node *res;
-    int selected[] = {-1, -1, -1, -1};
-    int index = 0;
-    bool present = false;
-    do
+    Node *temp;
+    Node *res = nullptr;
+    std::stack<Node *> choices;
+    std::stack<Node *> neighbors_copy(myNode->neighbors);
+
+    while (!neighbors_copy.empty())
     {
-        int dir = randInt(0, 3);
-        present = false;
-
-        for (int i = 0; i < 4; i++)
+        temp = neighbors_copy.top();
+        if (!temp->visited)
         {
-            if (selected[i] == dir)
-            {
-                present = true;
-            }
+            choices.push(temp);
         }
+        neighbors_copy.pop();
+    }
+    if (choices.empty())
+    {
+        return nullptr;
+    }
 
-        if (!present)
-        {
-            selected[index] = dir;
-            index++;
+    int rnd = randInt(0, choices.size() - 1);
+    for (int i = 0; i < rnd; i++)
+    {
+        choices.pop();
+    }
+    Node *neighbor = choices.top();
+    neighbor->highlight = 2;
 
-            switch (dir)
-            {
-            case 1:
-                res = myNode->linkDown();
-                break;
-            case 2:
-                res = myNode->linkRight();
-                break;
-            case 3:
-                res = myNode->linkLeft();
-                break;
-            default:
-                res = myNode->linkUp();
-                break;
-            }
-        }
-        else
-        {
-            if (index == 4)
-            {
-                return nullptr;
-            }
-        }
-
-    } while (res == nullptr);
+    int x = neighbor->getX() - myNode->getX();
+    int y = neighbor->getY() - myNode->getY();
+    if (x == 0 && y == 1)
+    {
+        res = myNode->linkUp();
+    }
+    if (x == 0 && y == -1)
+    {
+        res = myNode->linkDown();
+    }
+    if (x == -1 && y == 0)
+    {
+        res = myNode->linkLeft();
+    }
+    if (x == 1 && y == 0)
+    {
+        res = myNode->linkRight();
+    }
     return res;
 }
 

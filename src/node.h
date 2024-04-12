@@ -3,6 +3,7 @@
 
 #include "draw.h"
 #include "limits"
+#include <stack>
 
 /**
  * @brief This class represents a node on screen. Each node has up to four neighbors.
@@ -20,10 +21,11 @@ public:
 
     Node(int x, int y);
 
-    Node **getNeighbors();
-
     void draw();
     void draw(float r, float g, float b, bool fill);
+
+    int getX();
+    int getY();
 
     Node *linkUp();
     Node *linkDown();
@@ -32,24 +34,23 @@ public:
 
     int highlight = 0;
     int shortest_est = std::numeric_limits<int>::max();
+    int dist_from_dest = std::numeric_limits<int>::max();
 
     bool explored = false;
     bool visited = false;
 
-    int num_of_neighbors;
-
     Node *path_prev; // For when a path is found
-
+    std::stack<Node *> neighbors;
+    
+    bool links[4] = {false, false, false, false}; // Up, Down, Left, Right: False means there is a wall, true means no wall.
 private:
-    Node *up = nullptr;
-    Node *down = nullptr;
-    Node *left = nullptr;
-    Node *right = nullptr;
-
     int x;
     int y;
+
     float trans_x;
     float trans_y;
+
+
 };
 
 void djikstras();
